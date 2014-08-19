@@ -1,5 +1,6 @@
 /*
  * HDU 3588 -- 树分治
+ * pragma is only avilable using C++ instead of G++
  */
 #pragma comment(linker, "/STACK:25165824")
 # include <iostream>
