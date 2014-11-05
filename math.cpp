@@ -30,40 +30,31 @@ void Guass(double a[][MAXN],int n,double ans[]) {
                 ans[j] = a[i][n] / a[i][j];
 }
 
-double A[MAXN][MAXN], ans[MAXN];
+/* solve Pell Equation { x^2 - Dy^2 = 1 }
+ * return the minumum solution
+ * find the k_th minumum solution:
+ *
+ *      x_n = x_n-1 * x1 + D * y_n-1 * y1
+ *      y_n = x_n-1 * y1 + y_n-1 * x1
+ */
 
-int id[22][22];
-int main() {
-    int cnt = 0;
-    for(int i = 0; i < 20; ++i) {
-        for(int j = 0; j <= i; ++j)
-            id[i][j] = cnt++;
-    }
-    id[20][19] = cnt + 2;
-    double P;
-    while(~scanf("%lf", &P)) {
-        int cur, to;
-        for(int i = 0; i < 20; ++i) {
-            for(int j = 0; j < i; ++j) {
-                cur = id[i][j];
-                A[cur][cur] = 1;
-                A[cur][cnt] = 1;
-                to = id[i][max(0, j - 2)];
-                A[cur][to] -= (1-P);
-                to = id[i][j+1];
-                A[cur][to] -= P;
-            }
-            cur = id[i][i];
-            A[cur][cur] = 1;
-            A[cur][cnt] = 1;
-            to = id[i][max(0, i - 2)];
-            A[cur][to] -= (1-P);
-            to = id[i+1][i];
-            A[cur][to] -= P;
-        }
-        Guass(A, cnt, ans);
-        printf("%.6lf\n", ans[0]);
-    }
-    return 0;
-}
-
+bool pell( int D, int& x, int& y ) {  
+    int sqrtD = sqrt(D + 0.0);  
+    if( sqrtD * sqrtD == D ) return false;  
+    int c = sqrtD, q = D - c * c, a = (c + sqrtD) / q;  
+    int step = 0;  
+    int X[] = { 1, sqrtD };  
+    int Y[] = { 0, 1 };  
+    while( true ) {  
+        X[step] = a * X[step^1] + X[step];  
+        Y[step] = a * Y[step^1] + Y[step];  
+        c = a * q - c;  
+        q = (D - c * c) / q;  
+        a = (c + sqrtD) / q;  
+        step ^= 1;  
+        if( c == sqrtD && q == 1 && step ) {  
+            x = X[0], y = Y[0];  
+            return true;  
+        }  
+    }  
+}  

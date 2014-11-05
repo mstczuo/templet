@@ -56,6 +56,7 @@ void new_node(int &x,const int V)
     x = ++cnt;
     v[x] = m[x] = V;
     s[x] = 1;
+    l[x] = r[x] = 0;
 }
 
 void Tree_init(int &x,int L,int R)

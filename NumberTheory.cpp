@@ -44,4 +44,45 @@ ll gcd(ll a,ll b) {
     return a;
 }
 
+int modsqrt(int a,int n)
+{
+    int b,k,i,x;
+    if( n == 2 ) return a%n;
+    if( pw(a, (n-1) / 2, n) == n-1 ) return -1;
+    if( n%4 == 3 ) x = pw(a, (n+1)/4, n);
+    else{
+        for(b = 1;pw(b, (n-1) / 2 ,n) == 1;b++);
+        i = (n-1) / 2;
+        k = 0;
+        do{
+            i >>= 1;
+            k >>= 1;
+            if( (1ll*pw(a, i, n)*pw(b, k, n) + 1) % n == 0 )
+                k += (n-1) / 2;
+        }
+        while( i % 2 == 0 );
+        x = (1ll*pw(a, (i+1) / 2, n)*pw(b, k / 2, n)) % n;
+    }
+    if( x*2 > n ) x = n - x;
+    return x;
+}
+
+int divs[MAXN];
+int primitive_root(const int p) {
+    //assume p is a odd prime number
+    //when p is equal to 2, return 1.
+    int cnt = 0, m = p-1;
+    for(int i = 2; i*i <= m; i++) if(m%i==0) {
+        divs[cnt++] = i;
+        if(i*i < m) divs[cnt++] = m/i;
+    }
+    int r = 2, j = 0;
+    while(true) {
+        for(j=0; j<cnt; ++j) 
+            if(power(r, divs[j], p) == 1) break;
+        if(j >= cnt) return r; r++;
+    }
+    return -1;
+}
+
 
